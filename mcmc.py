@@ -16,19 +16,27 @@ imp.reload(gen)
 imp.reload(util)
 imp.reload(scn)
 
-MY_XYZ = Vector((6.,-4., 1.78))
-MY_EULER = Euler((1.3, 0., 0.8), 'XYZ')
+MY_XYZ = Vector((4.,-4., 1.78))
+MY_EULER = Euler((1.35, 0., 0.85), 'XYZ')
 
 
 
 def run(q_img, steps_nbr=100):
+	## delete default Cube
+	bpy.data.objects['Lamp'].select = False
+	bpy.data.objects['Camera'].select = False
+	bpy.data.objects['Cube'].select = True
+	bpy.ops.object.delete() 
+
 	init_camera()
 	init_light()
+
 	q_profile = util.get_profile(q_img)
 	u_curr = 0.1
 
 	xy0, obj_nbr = scn.estimate_img(q_img, MY_XYZ, MY_EULER)
 	scene = gen.init_scn(xy0, obj_nbr)
+	build(scene)
 
 	i = 0
 	while i < steps_nbr:
@@ -40,16 +48,24 @@ def run(q_img, steps_nbr=100):
 		u = util.similarity(p_img, q_profile)
 
 
+def build(scene):
+	for (xyz,th,dim) in scene:
+		bpy.ops.mesh.primitive_cube_add(location=xyz)
+		bpy.ops.transform.resize(value=0.5*dim)
+
+
+
+
 
 def init_camera():
 	Cam = bpy.data.objects['Camera']
+	Cam.location = MY_XYZ
 	Cam.rotation_euler = MY_EULER
 
 
 
 def init_light():
 	Lamp = bpy.data.objects['Lamp']
-	Lamp.location = Vector()
 	print("lamp location:", Lamp.location)
 	
 
