@@ -42,6 +42,7 @@ def init_camera():
 
 def init_light():
 	Lamp = bpy.data.objects['Lamp']
+	print("lamp location:", Lamp.location)
 	
 
 
@@ -51,5 +52,10 @@ def take_image(p_scn):
 	return np.zeros(480,640,3)
 
 
+if __name__ == '__main__':
+	# TODO: pass q_mage as an argument
+	img = np.zeros(480,640,3)
+
+	run(img, 1)
 
 
