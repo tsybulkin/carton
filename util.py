@@ -13,7 +13,7 @@ def similarity(img, q_profile):
 
 
 
-def get_profile(img): return 0.
+def get_profile(img): 
 	# TODO: define a structure for image pofiling
 	# 	and then return the profile of a given image
 	return 0.

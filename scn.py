@@ -6,7 +6,7 @@
 import numpy as np
 
 
-def estimate_img(q_img, my_coords):
+def estimate_img(q_img, my_coords, my_angles):
 	
 	# TODO: estimate object coords for a given self location and self euler angles	
 	return np.zeros(2), 2
