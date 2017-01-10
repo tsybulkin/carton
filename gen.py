@@ -5,16 +5,30 @@
 import numpy as np
 
 
-def get_proposal(scn):
-	# TODO:
+def get_proposal(scene):
+	""" Modifies objects properties and returns them
+	"""
+	new_scn = []
+	for (xyz,th,dim) in scene:
+		dim1 = dim + 0.5 * np.random.randn(3)
+		for i in range(3):
+			if dim1[i] < 0.2: dim1[i] = 0.2
+			if dim1[i] > 0.6: dim1[i] = 0.6
 
-	return 0.
+		x = xyz[0] + 0.5 * np.random.randn(1)
+		y = xyz[1] + 0.5 * np.random.randn(1)
+		z = dim[2] / 2
+
+		new_scn.append( (np.array([x,y,z]),th, dim1) )
+
+	return new_scn
 
 
 
 def init_scn(xy0, obj_nbr):
-
-	# TODO: return initial scene
+	""" Generates a given number of objects around a given point xy0
+	Returns the list of object properties in a tuple (xyz, th, dimensions) 
+	"""
 	scene = []
 
 	for _ in range(obj_nbr):
@@ -32,4 +46,5 @@ def init_scn(xy0, obj_nbr):
 		scene.append((xyz,th,dim))
 
 	return scene
+
 

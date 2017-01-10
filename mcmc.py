@@ -21,31 +21,42 @@ MY_EULER = Euler((1.35, 0., 0.85), 'XYZ')
 
 
 
-def run(q_img, steps_nbr=100):
-	## delete default Cube
+def run(q_img, steps_nbr=10):
+	
+	## delete default Cubes
+	boxes = get_boxes()
+	for b in boxes: b.select = True
+
 	bpy.data.objects['Lamp'].select = False
 	bpy.data.objects['Camera'].select = False
-	bpy.data.objects['Cube'].select = True
 	bpy.ops.object.delete() 
 
 	init_camera()
 	init_light()
 
 	q_profile = util.get_profile(q_img)
-	u_curr = 0.1
+	u_curr = 0.0
 
 	xy0, obj_nbr = scn.estimate_img(q_img, MY_XYZ, MY_EULER)
 	scene = gen.init_scn(xy0, obj_nbr)
 	build(scene)
+	boxes = get_boxes()
+	print("nbr of boxes:", len(boxes))
 
 	i = 0
 	while i < steps_nbr:
 		i += 1
+		print("round: ", i)
 
 		p_scn = gen.get_proposal(scene)
+		set_params(boxes, p_scn)
 		p_img = take_image(p_scn)
 
 		u = util.similarity(p_img, q_profile)
+		if point_accepted(u,u_curr):
+			scene = p_scn
+			u_curr = u
+
 
 
 def build(scene):
@@ -54,6 +65,25 @@ def build(scene):
 		bpy.ops.transform.resize(value=0.5*dim)
 
 
+
+def get_boxes():
+	return [ ob for ob in bpy.data.objects if ob.type == 'MESH' ]
+
+
+
+def set_params(boxes, scene):
+	assert len(boxes) == len(scene)
+
+	for i in range(len(boxes)):
+		boxes[i].location = scene[i][0]
+		boxes[i].dimensions = scene[i][2]
+		# TODO: add later theta
+
+
+
+def point_accepted(u2,u1):
+	if u2 - u1 >= 0.: return True
+	else: return np.random.uniform() < np.exp((u2-u1)*100)
 
 
 
