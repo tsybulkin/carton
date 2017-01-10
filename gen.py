@@ -17,7 +17,7 @@ def get_proposal(scene):
 
 		x = xyz[0] + 0.5 * np.random.randn(1)
 		y = xyz[1] + 0.5 * np.random.randn(1)
-		z = dim[2] / 2
+		z = dim1[2] / 2
 
 		new_scn.append( (np.array([x,y,z]),th, dim1) )
 

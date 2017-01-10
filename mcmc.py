@@ -3,7 +3,7 @@
 
 import bpy,os,sys
 import numpy as np
-import scipy
+from scipy import misc
 
 blend_dir = os.path.basename(bpy.data.filepath)
 if blend_dir not in sys.path:
@@ -19,10 +19,14 @@ imp.reload(scn)
 MY_XYZ = Vector((4.,-4., 1.78))
 MY_EULER = Euler((1.35, 0., 0.85), 'XYZ')
 
+CAM_WIDTH = 640
+CAM_HEIGHT = 480
 
 
 def run(q_img, steps_nbr=10):
-	
+	bpy.data.scenes['Scene'].render.filepath = 'rendered'
+	bpy.ops.render.render( write_still=True ) 
+
 	## delete default Cubes
 	boxes = get_boxes()
 	for b in boxes: b.select = True
@@ -50,7 +54,9 @@ def run(q_img, steps_nbr=10):
 
 		p_scn = gen.get_proposal(scene)
 		set_params(boxes, p_scn)
-		p_img = take_image(p_scn)
+		p_img = take_image()
+		print ("image shape:",p_img.shape)
+		#misc.imsave('rendered.jpg',p_img)
 
 		u = util.similarity(p_img, q_profile)
 		if point_accepted(u,u_curr):
@@ -100,10 +106,40 @@ def init_light():
 	
 
 
-def take_image(p_scn):
-	# TODO: render the scene and return the image
+def take_image():
+	# render parameters
+	bpy.context.scene.render.engine = 'BLENDER_RENDER'
+	bpy.context.scene.render.resolution_x = CAM_WIDTH
+	bpy.context.scene.render.resolution_y = CAM_HEIGHT
+	bpy.context.scene.render.resolution_percentage = 100
+	bpy.context.scene.frame_start = 1
+	bpy.context.scene.frame_end = 1
 
-	return np.zeros((480,640,3),np.dtype(np.uint8))
+	# switch on nodes
+	bpy.context.scene.use_nodes = True
+	tree = bpy.context.scene.node_tree
+	links = tree.links
+
+	# create input render layer node
+	rl = tree.nodes.new('CompositorNodeRLayers')
+	rl.location = 0,200
+
+	# create output node
+	v = tree.nodes.new('CompositorNodeViewer')
+	v.location = 200,200
+	v.use_alpha = False
+
+	# link Image output to Viewer input
+	links.new(rl.outputs[0], v.inputs[0])
+
+	ren = bpy.ops.render.render()
+
+	im_blend = bpy.data.images['Viewer Node']
+	im = 255*np.array(im_blend.pixels).reshape((CAM_HEIGHT,CAM_WIDTH,4))
+	im = im[::-1,:,:].astype('uint8')
+
+	return im
+
 
 
 if __name__ == '__main__':
