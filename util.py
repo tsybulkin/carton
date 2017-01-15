@@ -4,12 +4,19 @@
 import numpy as np
 from scipy import ndimage, misc
 
+TOLLERANCE = 10. # total diference in pixels 
 
-def similarity(img, q_profile): 
-	p_profile = get_profile(img)
 
-	# TODO: compare profiles and return the degree of its similarity
-	return np.random.uniform()
+def similarity(v, v_golden):
+	if len(v1) == 0 or len(v2) == 0: 
+		raise "Nothing to compare to each other as one set is empty"
+
+	
+	# TODO: for each edge in the first sorted list find a closest edge
+	#	in the second list and measure the distance between edge verteces
+
+	total_dist = 100 * np.random.uniform()
+	return TOLLERANCE / (TOLLERANCE + total_dist)
 
 
 

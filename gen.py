@@ -4,6 +4,24 @@
 
 import numpy as np
 
+MIN_SIZE = 0.2
+MAX_SIZE = 0.6
+
+
+def get_init_point(n=2):
+	return [ (np.random.randn(2), MIN_SIZE + np.random.rand(3) * (MAX_SIZE-MIN_SIZE) ) 
+				for _ in range(n) ]
+
+
+def get_vedges(scene):
+	for (xy, dimensions) in scene:
+		## find the farthest vertex and exclude it
+
+		## return projected edges
+	return []
+
+######### old code ##########################
+
 
 def get_proposal(scene):
 	""" Modifies objects properties and returns them
