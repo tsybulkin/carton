@@ -7,6 +7,13 @@ import numpy as np
 MIN_SIZE = 0.2
 MAX_SIZE = 0.6
 
+K = np.array([  [500., 0., 320.],
+				[0., 500., 240.],
+				[0.,   0., 1.]])
+Rt = np.array([ [0., -1., 0., 0.],
+				[0., 0., -1., 1.],
+				[1., 0., 0., 5.] ])
+
 
 def get_init_point(n=2):
 	return [ (np.random.randn(2), MIN_SIZE + np.random.rand(3) * (MAX_SIZE-MIN_SIZE) ) 
@@ -16,14 +23,25 @@ def get_init_point(n=2):
 def get_vedges(scene):
 	for (xy, dimensions) in scene:
 		## find the farthest vertex and exclude it
-
+		pass
 		## return projected edges
 	return []
+
+
+
+def xyz2uv(xyz):
+	u,v,w = K.dot(-Rt).dot(np.hstack([xyz,1.]))
+	return np.array([u/w,v/w])
+
+
+
+
+
 
 ######### old code ##########################
 
 
-def get_proposal(scene):
+def get_proposal(point):
 	""" Modifies objects properties and returns them
 	"""
 	new_scn = []
