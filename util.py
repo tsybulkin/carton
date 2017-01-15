@@ -8,7 +8,7 @@ TOLLERANCE = 10. # total diference in pixels
 
 
 def similarity(v, v_golden):
-	if len(v1) == 0 or len(v2) == 0: 
+	if len(v) == 0: 
 		raise "Nothing to compare to each other as one set is empty"
 
 	

@@ -8,7 +8,7 @@ import gen, util, scn
 
 
 def run(q_img, steps_nbr=10):
-	golden_point = get_init_point()
+	golden_point = gen.get_init_point()
 	vset_golden = gen.get_vedges(golden_point)
 
 	point = gen.get_init_point()
@@ -27,11 +27,6 @@ def run(q_img, steps_nbr=10):
 			scene = p_scn
 			u_curr = u
 
-
-
-def extract_vedges(img):
-	
-	return gen.get_vedges( (3*xy,dimensions) )
 	
 
 
