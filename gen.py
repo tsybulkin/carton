@@ -12,18 +12,20 @@ K = np.array([  [500., 0., 320.],
 				[0.,   0., 1.]])
 
 ## Camera angles
-phi = np.pi / 9   ## 20 degrees
+phi = np.pi / 9.   ## 20 degrees
+th = np.pi / 4.
 
 
 ## Euler angles for zxz proper scheme with the third angle equals zero
-c,s = np.cos(phi),np.sin(phi)
+c1,s1 = np.cos(phi),np.sin(phi)
+c2,s2 = np.cos(th),np.sin(th)
 DIST = 5.  # the distance of camera from the origin (0,0,0)  
 
-Rt = np.array([ [ 0., -1., 0., 0.],
-				[-s,  0., -c, 0.],
-				[ c,  0., -s, DIST] ])
+Rt = np.array([ [ s2,	-c2, 0., 0.],
+				[-s1*c2, -s1*s2, -c1, 0.],
+				[ c1*c2,  c1*s2, -s1, DIST] ])
 
-XYZc = np.array([-DIST*c, 0., DIST*s])
+XYZc = np.array([-DIST*c1*c2, -DIST*c1*s2, DIST*s1])
 
 
 
