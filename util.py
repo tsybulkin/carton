@@ -15,9 +15,18 @@ def similarity(v, v_golden):
 	# TODO: for each edge in the first sorted list find a closest edge
 	#	in the second list and measure the distance between edge verteces
 
-	total_dist = 100 * np.random.uniform()
-	return TOLLERANCE / (TOLLERANCE + total_dist)
+	# edge format: (type, uv1, uv2). All edges are sorted on u1
 
+	utility = sum( TOLLERANCE / (TOLLERANCE + min_dist(edge,v_golden)) for edge in v ) + \
+				sum( TOLLERANCE / (TOLLERANCE + min_dist(ed_gold,v)) for ed_gold in v_golden )
+	
+	return utility
+
+
+
+def min_dist(edge, other_edges):
+	return min( np.linalg.norm(edge[0]-ed[0])+np.linalg.norm(edge[1]-ed[1]) 
+					for ed in other_edges)
 
 
 

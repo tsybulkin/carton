@@ -37,7 +37,7 @@ def get_init_point(n=2):
 
 
 
-def get_vedges(scene):
+def get_vedges(scene,edge_type):
 	edges = []
 	for (xy, dimensions) in scene:
 		## find the farthest vertex and exclude it
@@ -53,9 +53,11 @@ def get_vedges(scene):
 		#print "visible:",visible_vertices
 		
 		## return projected edges
-		edges += [ (xyz2uv(np.hstack([xy, 0.])), xyz2uv(np.hstack([xy, dimensions[2]]))) 
+		edges += [ (edge_type, xyz2uv(np.hstack([xy, 0.])), xyz2uv(np.hstack([xy, dimensions[2]]))) 
 					for (_,xy) in visible_vertices ]
 
+
+	#return sorted(edges, key=lambda edge: edge[1][0])
 	return edges
 
 
@@ -76,8 +78,8 @@ def get_proposal(scene):
 			if dim1[i] < MIN_SIZE: dim1[i] = MIN_SIZE
 			if dim1[i] > MAX_SIZE: dim1[i] = MAX_SIZE
 
-		x = xy[0] + 0.5 * np.random.randn(1)
-		y = xy[1] + 0.5 * np.random.randn(1)
+		x = xy[0] + 0.1 * np.random.randn(1)
+		y = xy[1] + 0.1 * np.random.randn(1)
 		
 
 		new_scn.append( (np.hstack([x,y]), dim1) )
