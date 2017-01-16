@@ -17,10 +17,13 @@ phi = np.pi / 9   ## 20 degrees
 
 ## Euler angles for zxz proper scheme with the third angle equals zero
 c,s = np.cos(phi),np.sin(phi)
+DIST = 5.  # the distance of camera from the origin (0,0,0)  
 
 Rt = np.array([ [ 0., -1., 0., 0.],
 				[-s,  0., -c, 0.],
-				[ c,  0., -s, 5.] ])
+				[ c,  0., -s, DIST] ])
+
+XYZc = np.array([-DIST*c, 0., DIST*s])
 
 
 
@@ -35,7 +38,16 @@ def get_init_point(n=2):
 def get_vedges(scene):
 	for (xy, dimensions) in scene:
 		## find the farthest vertex and exclude it
-		pass
+		dx,dy,_ = dimensions / 2
+		lower_verteces = [ xy + np.array([dx*i,0]) + np.array([0,dy*j]) 
+							for i in [-1,1] for j in [-1,1] ]
+
+		dist_to_vertices = [ (np.linalg.norm(XYZc[:2] - lower_verteces),v) 
+								for v in lower_verteces]
+		visible_vertices = sorted(dist_to_vertices,key=lambda tup:tup[0])
+		visible_vertices.pop()
+		print 'visible vertices:', visible_vertices
+
 
 		## return projected edges
 
