@@ -38,6 +38,7 @@ def get_init_point(n=2):
 
 
 def get_vedges(scene):
+	edges = []
 	for (xy, dimensions) in scene:
 		## find the farthest vertex and exclude it
 		dx,dy,_ = dimensions / 2
@@ -48,12 +49,13 @@ def get_vedges(scene):
 								for v in lower_verteces]
 		visible_vertices = sorted(dist_to_vertices,key=lambda tup:tup[0])
 		visible_vertices.pop()
-		print 'visible vertices:', visible_vertices
-
-
+		
 		## return projected edges
+		edges += [ (xyz2uv(np.hstack([xy,0.])), xyz2uv(np.hstack([xy,dimensions[2]]))) 
+					for (_,xy) in visible_vertices ]
 
-	return []
+	print 'edges:',edges
+	return edges
 
 
 
