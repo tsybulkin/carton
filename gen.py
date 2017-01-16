@@ -45,16 +45,17 @@ def get_vedges(scene):
 		lower_verteces = [ xy + np.array([dx*i,0]) + np.array([0,dy*j]) 
 							for i in [-1,1] for j in [-1,1] ]
 
-		dist_to_vertices = [ (np.linalg.norm(XYZc[:2] - lower_verteces),v) 
+		dist_to_vertices = [ (np.linalg.norm(XYZc[:2] - v),v) 
 								for v in lower_verteces]
 		visible_vertices = sorted(dist_to_vertices,key=lambda tup:tup[0])
 		visible_vertices.pop()
+		#print 'dz:',dimensions[2]
+		#print "visible:",visible_vertices
 		
 		## return projected edges
-		edges += [ (xyz2uv(np.hstack([xy,0.])), xyz2uv(np.hstack([xy,dimensions[2]]))) 
+		edges += [ (xyz2uv(np.hstack([xy, 0.])), xyz2uv(np.hstack([xy, dimensions[2]]))) 
 					for (_,xy) in visible_vertices ]
 
-	print 'edges:',edges
 	return edges
 
 
@@ -70,7 +71,7 @@ def get_proposal(scene):
 	"""
 	new_scn = []
 	for (xy,dim) in scene:
-		dim1 = dim + 0.5 * np.random.randn(3)
+		dim1 = dim + 0.1 * np.random.randn(3)
 		for i in range(3):
 			if dim1[i] < MIN_SIZE: dim1[i] = MIN_SIZE
 			if dim1[i] > MAX_SIZE: dim1[i] = MAX_SIZE
@@ -79,7 +80,7 @@ def get_proposal(scene):
 		y = xy[1] + 0.5 * np.random.randn(1)
 		
 
-		new_scn.append( (np.array([x,y]), dim1) )
+		new_scn.append( (np.hstack([x,y]), dim1) )
 
 	return new_scn
 

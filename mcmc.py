@@ -17,14 +17,15 @@ def run(q_img, steps_nbr=10):
 	i = 0
 	while i < steps_nbr:
 		i += 1
-		print("round: ", i)
+		if i%100 == 0: print("round: ", i)
 
 		new_point = gen.get_proposal(point)
 		vset = gen.get_vedges(new_point)
 
 		u = util.similarity(vset, vset_golden)
 		if point_accepted(u,u_curr):
-			scene = p_scn
+			print 'new point:', new_point
+			point = new_point
 			u_curr = u
 
 	
@@ -44,6 +45,6 @@ if __name__ == '__main__':
 	# TODO: pass q_mage as an argument
 	img = np.zeros((480,640,3),np.dtype(np.uint8))
 
-	run(img, 1)
+	run(img, 1000)
 
 
