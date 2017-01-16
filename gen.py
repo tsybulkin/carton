@@ -11,9 +11,16 @@ K = np.array([  [500., 0., 320.],
 				[0., 500., 240.],
 				[0.,   0., 1.]])
 
-Rt = np.array([ [0., -1., 0., 0.],
-				[0., 0., -1., 1.],
-				[1., 0., 0., 5.] ])
+## Camera angles
+phi = np.pi / 9   ## 20 degrees
+
+
+## Euler angles for zxz proper scheme with the third angle equals zero
+c,s = np.cos(phi),np.sin(phi)
+
+Rt = np.array([ [ 0., -1., 0., 0.],
+				[-s,  0., -c, 0.],
+				[ c,  0., -s, 5.] ])
 
 
 
@@ -31,7 +38,7 @@ def get_vedges(scene):
 		pass
 
 		## return projected edges
-		
+
 	return []
 
 
